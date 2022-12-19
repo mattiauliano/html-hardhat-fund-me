@@ -39,7 +39,7 @@ const fund = async () => {
         const signer = provider.getSigner();
         // Get contract
         const contract = new ethers.Contract(contractAddress, abi, signer);
-
+        // Try to avoid blocking the program for a rejection
         try {
             // Make a fund
             const transactionResponse = await contract.fund({
