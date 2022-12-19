@@ -7,6 +7,7 @@ import { abi, contractAddress } from "./constants.js";
 // Select from the document
 const connectBtn = document.getElementById("connectBtn");
 const balanceBtn = document.getElementById("balanceBtn");
+const withdrawBtn = document.getElementById("withdrawBtn");
 const fundBtn = document.getElementById("fundBtn");
 const ethAmountInput = document.getElementById("ethAmountInput");
 
@@ -62,6 +63,22 @@ const getBalance = async () => {
     }
 };
 
+// Withdraw
+const withdraw = async () => {
+    if (typeof window.ethereum !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+        try {
+            const transactionResponse = await contract.withdraw();
+            await listenForTransactionMine(transactionResponse, provider);
+            console.log("Done!");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
 // Listen for tx to be mined
 const listenForTransactionMine = (transactionResponse, provider) => {
     console.log(`Mining ${transactionResponse.hash}...`);
@@ -82,3 +99,4 @@ const listenForTransactionMine = (transactionResponse, provider) => {
 connectBtn.addEventListener("click", connect);
 fundBtn.addEventListener("click", fund);
 balanceBtn.addEventListener("click", getBalance);
+withdrawBtn.addEventListener("click", withdraw);
