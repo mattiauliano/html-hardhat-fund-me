@@ -43,10 +43,29 @@ const fund = async () => {
             const transactionResponse = await contract.fund({
                 value: ethers.utils.parseEther(ethAmount),
             });
+            // Wait for tx to finish --> await
+            await listenForTransactionMine(transactionResponse, provider);
+            console.log("Done!");
         } catch (error) {
             console.log(error);
         }
     }
+};
+
+// Listen for tx to be mined
+const listenForTransactionMine = (transactionResponse, provider) => {
+    console.log(`Mining ${transactionResponse.hash}...`);
+    // Use a promise to avoid kicking off .once event in the queue
+    return new Promise((resolve, reject) => {
+        // Once receive the hash use the callback
+        provider.once(transactionResponse.hash, (transactionReceipt) => {
+            console.log(
+                `Completed with ${transactionReceipt.confirmations} confirmations`
+            );
+            // Resolve once found transaction hash
+            resolve();
+        });
+    });
 };
 
 // On click calls function
