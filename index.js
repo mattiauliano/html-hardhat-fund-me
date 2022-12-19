@@ -6,6 +6,7 @@ import { abi, contractAddress } from "./constants.js";
 
 // Select from the document
 const connectBtn = document.getElementById("connectBtn");
+const balanceBtn = document.getElementById("balanceBtn");
 const fundBtn = document.getElementById("fundBtn");
 const ethAmountInput = document.getElementById("ethAmountInput");
 
@@ -52,6 +53,15 @@ const fund = async () => {
     }
 };
 
+// Get contract balance
+const getBalance = async () => {
+    if (typeof window.ethereum !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const balance = await provider.getBalance(contractAddress);
+        console.log(ethers.utils.formatEther(balance));
+    }
+};
+
 // Listen for tx to be mined
 const listenForTransactionMine = (transactionResponse, provider) => {
     console.log(`Mining ${transactionResponse.hash}...`);
@@ -71,3 +81,4 @@ const listenForTransactionMine = (transactionResponse, provider) => {
 // On click calls function
 connectBtn.addEventListener("click", connect);
 fundBtn.addEventListener("click", fund);
+balanceBtn.addEventListener("click", getBalance);
