@@ -26,8 +26,6 @@ You can usually just double click the file to "run it in the browser". Or you ca
 
 And you should see a small button that says "connect".
 
-![Connect](connect.png)
-
 Hit it, and you should see metamask pop up.
 
 # Execute a transaction
